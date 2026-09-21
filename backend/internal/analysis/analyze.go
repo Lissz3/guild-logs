@@ -132,7 +132,7 @@ func newAnalyzer(cfg *config.Config, fd *model.FightData, opt Options) *Analyzer
 	}
 	for id := range a.deaths {
 		ts := a.deaths[id]
-		sort.Slice(ts, func(i, j int) bool { return ts[i] < ts[j] })
+		sort.SliceStable(ts, func(i, j int) bool { return ts[i] < ts[j] })
 	}
 
 	for _, p := range a.players {
