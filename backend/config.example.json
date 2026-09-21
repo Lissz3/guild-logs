@@ -1,0 +1,7 @@
+{
+  "port": "8080",
+  "wclClientId": "PASTE_YOUR_CLIENT_ID",
+  "wclClientSecret": "PASTE_YOUR_CLIENT_SECRET",
+  "cacheDir": ".cache",
+  "analysisConfig": ""
+}

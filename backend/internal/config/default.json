@@ -1,0 +1,96 @@
+{
+  "_nota": "Datos editables. Revisar cada temporada: IDs, cooldowns y talentos cambian con los parches. Los cooldowns se emparejan por id O por nombre (en ingles, como los devuelve Warcraft Logs).",
+  "thresholds": {
+    "windowSec": 5,
+    "mechanicPct": 60,
+    "mechanicHighPct": 80,
+    "usedLookbackSec": 10,
+    "spikePct": 50,
+    "gapSec": 2.5,
+    "outlierRatio": 2.0,
+    "outlierMinSharePct": 10,
+    "wipeIgnoreAfterPct": 25
+  },
+  "defensives": [
+    {"name": "Shield Wall", "id": 871, "class": "Warrior", "specs": ["Protection"], "cooldown": 180, "kind": "personal"},
+    {"name": "Last Stand", "id": 12975, "class": "Warrior", "specs": ["Protection"], "cooldown": 180, "kind": "personal", "talent": true},
+    {"name": "Die by the Sword", "id": 118038, "class": "Warrior", "specs": ["Arms"], "cooldown": 120, "kind": "personal"},
+    {"name": "Enraged Regeneration", "id": 184364, "class": "Warrior", "specs": ["Fury"], "cooldown": 120, "kind": "personal"},
+    {"name": "Rallying Cry", "id": 97462, "class": "Warrior", "cooldown": 180, "kind": "raid", "talent": true},
+
+    {"name": "Divine Shield", "id": 642, "class": "Paladin", "cooldown": 300, "kind": "personal"},
+    {"name": "Divine Protection", "id": 498, "class": "Paladin", "specs": ["Holy", "Retribution"], "cooldown": 60, "kind": "personal"},
+    {"name": "Ardent Defender", "id": 31850, "class": "Paladin", "specs": ["Protection"], "cooldown": 120, "kind": "personal"},
+    {"name": "Guardian of Ancient Kings", "id": 86659, "class": "Paladin", "specs": ["Protection"], "cooldown": 300, "kind": "personal"},
+    {"name": "Lay on Hands", "id": 633, "class": "Paladin", "cooldown": 420, "kind": "external"},
+    {"name": "Blessing of Sacrifice", "id": 6940, "class": "Paladin", "cooldown": 120, "kind": "external", "talent": true},
+    {"name": "Aura Mastery", "id": 31821, "class": "Paladin", "specs": ["Holy"], "cooldown": 180, "kind": "raid"},
+
+    {"name": "Icebound Fortitude", "id": 48792, "class": "DeathKnight", "cooldown": 180, "kind": "personal"},
+    {"name": "Anti-Magic Shell", "id": 48707, "class": "DeathKnight", "cooldown": 60, "kind": "personal"},
+    {"name": "Vampiric Blood", "id": 55233, "class": "DeathKnight", "specs": ["Blood"], "cooldown": 90, "kind": "personal"},
+    {"name": "Anti-Magic Zone", "id": 51052, "class": "DeathKnight", "cooldown": 240, "kind": "raid", "talent": true},
+
+    {"name": "Blur", "id": 198589, "class": "DemonHunter", "specs": ["Havoc"], "cooldown": 60, "kind": "personal"},
+    {"name": "Fiery Brand", "id": 204021, "class": "DemonHunter", "specs": ["Vengeance"], "cooldown": 60, "kind": "personal"},
+    {"name": "Demon Spikes", "id": 203720, "class": "DemonHunter", "specs": ["Vengeance"], "cooldown": 20, "charges": 2, "kind": "personal"},
+    {"name": "Darkness", "id": 196718, "class": "DemonHunter", "cooldown": 300, "kind": "raid", "talent": true},
+
+    {"name": "Barkskin", "id": 22812, "class": "Druid", "cooldown": 60, "kind": "personal"},
+    {"name": "Survival Instincts", "id": 61336, "class": "Druid", "specs": ["Feral", "Guardian"], "cooldown": 180, "charges": 2, "kind": "personal"},
+    {"name": "Ironbark", "id": 102342, "class": "Druid", "specs": ["Restoration"], "cooldown": 90, "kind": "external"},
+    {"name": "Tranquility", "id": 740, "class": "Druid", "specs": ["Restoration"], "cooldown": 180, "kind": "raid"},
+
+    {"name": "Obsidian Scales", "id": 363916, "class": "Evoker", "cooldown": 90, "charges": 2, "kind": "personal", "talent": true},
+    {"name": "Renewing Blaze", "id": 374348, "class": "Evoker", "cooldown": 90, "kind": "personal", "talent": true},
+    {"name": "Rewind", "id": 363534, "class": "Evoker", "specs": ["Preservation"], "cooldown": 240, "kind": "raid"},
+    {"name": "Zephyr", "id": 374227, "class": "Evoker", "cooldown": 120, "kind": "raid", "talent": true},
+
+    {"name": "Aspect of the Turtle", "id": 186265, "class": "Hunter", "cooldown": 180, "kind": "personal"},
+    {"name": "Exhilaration", "id": 109304, "class": "Hunter", "cooldown": 120, "kind": "personal"},
+    {"name": "Survival of the Fittest", "id": 264735, "class": "Hunter", "cooldown": 120, "kind": "personal", "talent": true},
+
+    {"name": "Ice Block", "id": 45438, "class": "Mage", "cooldown": 240, "kind": "personal"},
+    {"name": "Alter Time", "id": 342245, "class": "Mage", "cooldown": 60, "kind": "personal", "talent": true},
+    {"name": "Greater Invisibility", "id": 110959, "class": "Mage", "cooldown": 120, "kind": "personal", "talent": true},
+
+    {"name": "Fortifying Brew", "id": 115203, "class": "Monk", "cooldown": 180, "kind": "personal", "talent": true},
+    {"name": "Touch of Karma", "id": 122470, "class": "Monk", "specs": ["Windwalker"], "cooldown": 90, "kind": "personal"},
+    {"name": "Diffuse Magic", "id": 122783, "class": "Monk", "cooldown": 90, "kind": "personal", "talent": true},
+    {"name": "Life Cocoon", "id": 116849, "class": "Monk", "specs": ["Mistweaver"], "cooldown": 120, "kind": "external"},
+    {"name": "Revival", "id": 115310, "class": "Monk", "specs": ["Mistweaver"], "cooldown": 180, "kind": "raid"},
+
+    {"name": "Desperate Prayer", "id": 19236, "class": "Priest", "cooldown": 90, "kind": "personal", "talent": true},
+    {"name": "Dispersion", "id": 47585, "class": "Priest", "specs": ["Shadow"], "cooldown": 120, "kind": "personal"},
+    {"name": "Pain Suppression", "id": 33206, "class": "Priest", "specs": ["Discipline"], "cooldown": 180, "kind": "external"},
+    {"name": "Guardian Spirit", "id": 47788, "class": "Priest", "specs": ["Holy"], "cooldown": 180, "kind": "external"},
+    {"name": "Power Word: Barrier", "id": 62618, "class": "Priest", "specs": ["Discipline"], "cooldown": 180, "kind": "raid"},
+    {"name": "Divine Hymn", "id": 64843, "class": "Priest", "specs": ["Holy"], "cooldown": 180, "kind": "raid"},
+    {"name": "Vampiric Embrace", "id": 15286, "class": "Priest", "specs": ["Shadow"], "cooldown": 120, "kind": "raid"},
+
+    {"name": "Cloak of Shadows", "id": 31224, "class": "Rogue", "cooldown": 120, "kind": "personal"},
+    {"name": "Evasion", "id": 5277, "class": "Rogue", "cooldown": 120, "kind": "personal"},
+
+    {"name": "Astral Shift", "id": 108271, "class": "Shaman", "cooldown": 120, "kind": "personal"},
+    {"name": "Spirit Link Totem", "id": 98008, "class": "Shaman", "specs": ["Restoration"], "cooldown": 180, "kind": "raid"},
+    {"name": "Healing Tide Totem", "id": 108280, "class": "Shaman", "specs": ["Restoration"], "cooldown": 180, "kind": "raid"},
+
+    {"name": "Unending Resolve", "id": 104773, "class": "Warlock", "cooldown": 180, "kind": "personal"},
+    {"name": "Dark Pact", "id": 108416, "class": "Warlock", "cooldown": 60, "kind": "personal", "talent": true}
+  ],
+  "consumables": [
+    {"name": "Healthstone", "pattern": "healthstone", "requiresClassInRaid": "Warlock"},
+    {"name": "Healing Potion", "pattern": "healing potion|health potion"}
+  ],
+  "avoidable": {
+    "_nota": "abilityIDs evitables por encounterID. Rellenar con las mecanicas de la raid actual. Sin esto, la herramienta usa solo la deteccion estadistica (outliers vs mediana de la raid).",
+    "byEncounter": {},
+    "global": []
+  },
+  "ignoreDamage": [1],
+  "activity": {
+    "ignorePatterns": ["healthstone", "potion", "phial", "flask", "augment", "food", "drink", "bloodlust", "heroism", "time warp", "primal rage", "fury of the aspects", "drums", "trinket", "racial"],
+    "gcdByClass": {"Rogue": 1.0, "Monk": 1.0},
+    "defaultGcd": 1.5
+  }
+}
