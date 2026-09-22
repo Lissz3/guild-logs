@@ -153,7 +153,9 @@ func (s *server) handleAnalyze(w http.ResponseWriter, r *http.Request) {
 	setF("spikePct", &t.SpikePct)
 	setF("gapSec", &t.GapSec)
 	if v := q.Get("wipeIgnoreDeaths"); v != "" {
-		if n, err := strconv.Atoi(v); err == nil && n > 0 {
+		// >= 0: 0 explicitly disables the filter (see analyzeDeaths), so it must
+		// override the config default rather than being treated as "unset".
+		if n, err := strconv.Atoi(v); err == nil && n >= 0 {
 			t.WipeIgnoreAfterDeaths = n
 		}
 	}

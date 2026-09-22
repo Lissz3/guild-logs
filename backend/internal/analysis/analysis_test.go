@@ -119,6 +119,23 @@ func TestWipeIgnoresLateDeaths(t *testing.T) {
 	}
 }
 
+func TestWipeIgnoreDisabledWhenZero(t *testing.T) {
+	cfg, _ := config.Load("")
+	fd := demo.Fight()
+	fd.Fight.Kill = false
+	th := cfg.Thresholds
+	th.WipeIgnoreAfterDeaths = 0 // 0 = no filtrar: todas las muertes cuentan
+	r := Analyze(cfg, fd, Options{Thresholds: th})
+	for _, d := range r.Deaths {
+		if d.Ignored {
+			t.Errorf("ninguna muerte debería ignorarse con el filtro desactivado: %+v", d)
+		}
+	}
+	if r.Summary.CountedDeaths != len(r.Deaths) {
+		t.Errorf("contadas=%d, esperaba %d", r.Summary.CountedDeaths, len(r.Deaths))
+	}
+}
+
 func TestAvoidableOutlier(t *testing.T) {
 	r := run(t)
 	var careless *PlayerAvoidable

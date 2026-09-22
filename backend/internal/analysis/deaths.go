@@ -21,16 +21,11 @@ func (a *Analyzer) analyzeDeaths() []DeathReport {
 	sort.SliceStable(deaths, func(i, j int) bool { return deaths[i].Timestamp < deaths[j].Timestamp })
 
 	// En wipes, las muertes a partir de la Nº WipeIgnoreAfterDeaths no cuentan
-	// (se asume que a partir de ahí el intento ya estaba perdido).
+	// (se asume que a partir de ahí el intento ya estaba perdido). 0 (o menos)
+	// desactiva el filtro: no se ignora ninguna muerte.
 	ignoreFrom := len(deaths)
-	if !a.fd.Fight.Kill {
-		n := a.t.WipeIgnoreAfterDeaths
-		if n < 1 {
-			n = 1
-		}
-		if n < ignoreFrom {
-			ignoreFrom = n
-		}
+	if !a.fd.Fight.Kill && a.t.WipeIgnoreAfterDeaths > 0 && a.t.WipeIgnoreAfterDeaths < ignoreFrom {
+		ignoreFrom = a.t.WipeIgnoreAfterDeaths
 	}
 
 	out := make([]DeathReport, 0, len(deaths))

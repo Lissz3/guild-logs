@@ -253,11 +253,11 @@ export function Analyzer() {
               )}
               {num(
                 "wipeIgnoreDeaths",
-                1,
+                0,
                 40,
                 1,
                 "Ignore deaths after",
-                "On a wipe (not a kill), deaths from this Nth one onward are excluded from counts and verdicts — the attempt is assumed already lost by then.",
+                "On a wipe (not a kill), deaths from this Nth one onward are excluded from counts and verdicts — the attempt is assumed already lost by then. 0 or empty: don't filter, count every death.",
               )}
               <label className="flex items-center gap-1.5 self-end pb-2 text-[13px] text-fg-2">
                 <input
