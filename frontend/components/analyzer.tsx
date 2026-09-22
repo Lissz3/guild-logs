@@ -20,13 +20,22 @@ const TABS = [
 ] as const;
 type TabId = (typeof TABS)[number]["id"];
 
-const DEFAULT_OPTIONS: AnalysisOptions = { window: 5, mechanicPct: 60, spikePct: 50, gapSec: 2.5, assumeTalents: false };
+const DEFAULT_OPTIONS: AnalysisOptions = {
+  window: 5,
+  mechanicPct: 60,
+  spikePct: 50,
+  gapSec: 2.5,
+  wipeIgnoreDeaths: 3,
+  assumeTalents: false,
+};
 
 const input =
   "min-w-0 rounded-md border border-line bg-bg px-2.5 py-2 text-fg outline-none focus:border-series";
 const button =
   "rounded-md border border-series bg-series px-3.5 py-2 text-white hover:brightness-110 disabled:opacity-60";
 const buttonGhost = "rounded-md border border-series px-3.5 py-2 text-series hover:brightness-110 disabled:opacity-60";
+const buttonBig =
+  "rounded-md border border-series bg-series px-10 py-3 text-base font-semibold text-white hover:brightness-110 disabled:opacity-60";
 
 function Field({
   label,
@@ -70,6 +79,7 @@ export function Analyzer() {
           mechanicPct: c.thresholds.mechanicPct,
           spikePct: c.thresholds.spikePct,
           gapSec: c.thresholds.gapSec,
+          wipeIgnoreDeaths: c.thresholds.wipeIgnoreAfterDeaths,
         }));
         if (!c.wclConfigured) {
           setStatus({
@@ -126,7 +136,7 @@ export function Analyzer() {
   const num = (key: keyof AnalysisOptions, min: number, max: number, step: number, label: string, hint: string) => (
     <Field label={label} hint={hint}>
       <input
-        className={`${input} w-28`}
+        className={`${input} w-full`}
         type="number"
         min={min}
         max={max}
@@ -185,13 +195,13 @@ export function Analyzer() {
             {meta.guild ? ` · ${meta.guild}` : ""}
           </h2>
           <form
-            className="flex flex-wrap items-end gap-3"
+            className="flex flex-col gap-3"
             onSubmit={(e) => {
               e.preventDefault();
               void runAnalysis();
             }}
           >
-            <Field label="Fight" className="min-w-[220px] flex-1">
+            <Field label="Fight" className="w-full">
               <select
                 className={input}
                 value={fightId ?? ""}
@@ -205,52 +215,64 @@ export function Analyzer() {
                 ))}
               </select>
             </Field>
-            {num(
-              "window",
-              1,
-              30,
-              1,
-              "Lookback window (s)",
-              "How many seconds of damage before a death to look at when picking the killing blow's top sources and deciding the verdict.",
-            )}
-            {num(
-              "mechanicPct",
-              10,
-              200,
-              5,
-              "Mechanic death (% HP)",
-              "A death is flagged as a mechanic death when the player took at least this % of their max HP during the lookback window.",
-            )}
-            {num(
-              "spikePct",
-              10,
-              200,
-              5,
-              "Damage spike (% HP)",
-              "A window where the player took at least this % of max HP counts as a damage spike, used to check whether a personal defensive was available and went unused.",
-            )}
-            {num(
-              "gapSec",
-              1,
-              20,
-              0.5,
-              "Min. gap (s)",
-              "In the Activity tab, downtime gaps at least this long are listed individually.",
-            )}
-            <label className="flex items-center gap-1.5 pb-2 text-[13px] text-fg-2">
-              <input
-                type="checkbox"
-                checked={opts.assumeTalents}
-                onChange={(e) => setOpts({ ...opts, assumeTalents: e.target.checked })}
-              />
-              <span className="inline-flex items-center gap-1">
-                Assume talents
-                <InfoTip text="Count talent-gated defensives as owned even if the player never used them in this fight." />
-              </span>
-            </label>
-            <button className={button} type="submit" disabled={busy || fightId === null}>
-              Analyze
-            </button>
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+              {num(
+                "window",
+                1,
+                30,
+                1,
+                "Lookback window (s)",
+                "How many seconds of damage before a death to look at when picking the killing blow's top sources and deciding the verdict.",
+              )}
+              {num(
+                "mechanicPct",
+                10,
+                200,
+                5,
+                "Mechanic death (% HP)",
+                "A death is flagged as a mechanic death when the player took at least this % of their max HP during the lookback window.",
+              )}
+              {num(
+                "spikePct",
+                10,
+                200,
+                5,
+                "Damage spike (% HP)",
+                "A window where the player took at least this % of max HP counts as a damage spike, used to check whether a personal defensive was available and went unused.",
+              )}
+              {num(
+                "gapSec",
+                1,
+                20,
+                0.5,
+                "Min. gap (s)",
+                "In the Activity tab, downtime gaps at least this long are listed individually.",
+              )}
+              {num(
+                "wipeIgnoreDeaths",
+                1,
+                40,
+                1,
+                "Ignore deaths after",
+                "On a wipe (not a kill), deaths from this Nth one onward are excluded from counts and verdicts — the attempt is assumed already lost by then.",
+              )}
+              <label className="flex items-center gap-1.5 self-end pb-2 text-[13px] text-fg-2">
+                <input
+                  type="checkbox"
+                  checked={opts.assumeTalents}
+                  onChange={(e) => setOpts({ ...opts, assumeTalents: e.target.checked })}
+                />
+                <span className="inline-flex items-center gap-1">
+                  Assume talents
+                  <InfoTip text="Count talent-gated defensives as owned even if the player never used them in this fight." />
+                </span>
+              </label>
+            </div>
+            <div className="flex justify-center pt-2">
+              <button className={buttonBig} type="submit" disabled={busy || fightId === null}>
+                Analyze
+              </button>
+            </div>
           </form>
         </Card>
       )}

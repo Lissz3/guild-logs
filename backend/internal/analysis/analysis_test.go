@@ -106,7 +106,7 @@ func TestWipeIgnoresLateDeaths(t *testing.T) {
 	fd := demo.Fight()
 	fd.Fight.Kill = false
 	th := cfg.Thresholds
-	th.WipeIgnoreAfterPct = 10 // 20 jugadores -> cuentan las 2 primeras muertes
+	th.WipeIgnoreAfterDeaths = 2 // cuentan las 2 primeras muertes, se ignora la 3ª
 	r := Analyze(cfg, fd, Options{Thresholds: th})
 	ign := 0
 	for _, d := range r.Deaths {

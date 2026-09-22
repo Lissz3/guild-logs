@@ -21,7 +21,7 @@ type Thresholds struct {
 	GapSec             float64 `json:"gapSec"`             // hueco mínimo para contar como downtime
 	OutlierRatio       float64 `json:"outlierRatio"`       // veces la mediana para marcar daño "posiblemente evitable"
 	OutlierMinSharePct float64 `json:"outlierMinSharePct"` // mínimo % del daño total del jugador
-	WipeIgnoreAfterPct float64 `json:"wipeIgnoreAfterPct"` // en wipes, se ignoran las muertes tras este % de la raid
+	WipeIgnoreAfterDeaths int  `json:"wipeIgnoreAfterDeaths"` // en wipes, las muertes a partir de esta (inclusive) no cuentan
 }
 
 type Defensive struct {

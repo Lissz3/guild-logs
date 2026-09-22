@@ -152,6 +152,11 @@ func (s *server) handleAnalyze(w http.ResponseWriter, r *http.Request) {
 	setF("mechanicHighPct", &t.MechanicHighPct)
 	setF("spikePct", &t.SpikePct)
 	setF("gapSec", &t.GapSec)
+	if v := q.Get("wipeIgnoreDeaths"); v != "" {
+		if n, err := strconv.Atoi(v); err == nil && n > 0 {
+			t.WipeIgnoreAfterDeaths = n
+		}
+	}
 
 	var fd *model.FightData
 	if code == "demo" {

@@ -2,7 +2,6 @@ package analysis
 
 import (
 	"fmt"
-	"math"
 	"sort"
 	"strings"
 
@@ -21,12 +20,13 @@ func (a *Analyzer) analyzeDeaths() []DeathReport {
 	}
 	sort.SliceStable(deaths, func(i, j int) bool { return deaths[i].Timestamp < deaths[j].Timestamp })
 
-	// En wipes, las muertes tras el "punto de no retorno" no cuentan.
+	// En wipes, las muertes a partir de la Nº WipeIgnoreAfterDeaths no cuentan
+	// (se asume que a partir de ahí el intento ya estaba perdido).
 	ignoreFrom := len(deaths)
-	if !a.fd.Fight.Kill && len(a.players) > 0 {
-		n := int(math.Ceil(a.t.WipeIgnoreAfterPct / 100 * float64(len(a.players))))
-		if n < 2 {
-			n = 2
+	if !a.fd.Fight.Kill {
+		n := a.t.WipeIgnoreAfterDeaths
+		if n < 1 {
+			n = 1
 		}
 		if n < ignoreFrom {
 			ignoreFrom = n

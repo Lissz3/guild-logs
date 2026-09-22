@@ -26,6 +26,7 @@ export interface ServerConfig {
     mechanicPct: number;
     spikePct: number;
     gapSec: number;
+    wipeIgnoreAfterDeaths: number;
   };
   wclConfigured: boolean;
 }
@@ -199,5 +200,6 @@ export interface AnalysisOptions {
   mechanicPct: number;
   spikePct: number;
   gapSec: number;
+  wipeIgnoreDeaths: number;
   assumeTalents: boolean;
 }

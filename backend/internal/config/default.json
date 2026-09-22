@@ -9,7 +9,7 @@
     "gapSec": 2.5,
     "outlierRatio": 2.0,
     "outlierMinSharePct": 10,
-    "wipeIgnoreAfterPct": 25
+    "wipeIgnoreAfterDeaths": 3
   },
   "defensives": [
     {"name": "Shield Wall", "id": 871, "class": "Warrior", "specs": ["Protection"], "cooldown": 180, "kind": "personal"},

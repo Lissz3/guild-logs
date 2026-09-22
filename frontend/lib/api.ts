@@ -31,6 +31,7 @@ export async function analyze(code: string, fight: number, o: AnalysisOptions): 
     mechanicPct: String(o.mechanicPct),
     spikePct: String(o.spikePct),
     gapSec: String(o.gapSec),
+    wipeIgnoreDeaths: String(o.wipeIgnoreDeaths),
     assumeTalents: o.assumeTalents ? "1" : "0",
   });
   return {
