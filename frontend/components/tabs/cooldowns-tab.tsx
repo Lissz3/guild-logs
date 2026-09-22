@@ -1,6 +1,6 @@
 import type { AnalysisResult } from "@/lib/types";
 import { KIND_LABEL, mmss, pct, ROLE_LABEL } from "@/lib/format";
-import { AbilityLabel, Badge, Muted, Note, PlayerLabel, Table, TD, TH, TR } from "@/components/ui";
+import { AbilityLabel, AbilityRefList, Badge, Muted, Note, PlayerLabel, Table, TD, TH, TR } from "@/components/ui";
 
 export function CooldownsTab({ result }: { result: AnalysisResult }) {
   const list = result.cooldowns.filter((p) => p.cooldowns.length || p.spikes.length);
@@ -38,7 +38,9 @@ export function CooldownsTab({ result }: { result: AnalysisResult }) {
               <tbody>
                 {p.cooldowns.map((c) => (
                   <TR key={c.name}>
-                    <TD>{c.name}</TD>
+                    <TD>
+                      <AbilityLabel name={c.name} icon={c.abilityIcon} abilityId={c.abilityId} />
+                    </TD>
                     <TD>{KIND_LABEL[c.kind]}</TD>
                     <TD num>{c.cooldown}s</TD>
                     <TD num>
@@ -74,8 +76,14 @@ export function CooldownsTab({ result }: { result: AnalysisResult }) {
                       <TD>
                         <AbilityLabel name={s.top} icon={s.topIcon} abilityId={s.topAbilityId} />
                       </TD>
-                      <TD>{s.available.length ? <b>{s.available.join(", ")}</b> : <Muted>–</Muted>}</TD>
-                      <TD>{s.used.length ? s.used.join(", ") : <Muted>–</Muted>}</TD>
+                      <TD>
+                        <b>
+                          <AbilityRefList items={s.available} empty="–" />
+                        </b>
+                      </TD>
+                      <TD>
+                        <AbilityRefList items={s.used} empty="–" />
+                      </TD>
                     </TR>
                   ))}
                 </tbody>

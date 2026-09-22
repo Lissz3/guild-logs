@@ -37,6 +37,15 @@ func has(list []string, s string) bool {
 	return false
 }
 
+func hasAbility(list []AbilityRef, name string) bool {
+	for _, x := range list {
+		if x.Name == name {
+			return true
+		}
+	}
+	return false
+}
+
 func TestDeathMageMechanicAndAvoidable(t *testing.T) {
 	d := findDeath(t, run(t), demo.PIDMageDeath)
 	if d.WindowPct < 85 || d.WindowPct > 95 {
@@ -47,10 +56,10 @@ func TestDeathMageMechanicAndAvoidable(t *testing.T) {
 			t.Errorf("falta flag %q: %v", f, d.Flags)
 		}
 	}
-	if !has(d.DefensivesAvailable, "Ice Block") {
+	if !hasAbility(d.DefensivesAvailable, "Ice Block") {
 		t.Errorf("Ice Block debería estar disponible: %v", d.DefensivesAvailable)
 	}
-	if !has(d.ConsumablesAvailable, "Healthstone") || !has(d.ConsumablesAvailable, "Healing Potion") {
+	if !hasAbility(d.ConsumablesAvailable, "Healthstone") || !hasAbility(d.ConsumablesAvailable, "Healing Potion") {
 		t.Errorf("HS y poción deberían estar disponibles: %v", d.ConsumablesAvailable)
 	}
 	if d.KillingAbility != "Shadow Bolt Volley" {
@@ -69,7 +78,7 @@ func TestDeathWarriorUsedEverything(t *testing.T) {
 	if has(d.Flags, "avoidable") {
 		t.Errorf("no debería ser evitable: disp=%v cons=%v", d.DefensivesAvailable, d.ConsumablesAvailable)
 	}
-	if !has(d.DefensivesUsed, "Enraged Regeneration") {
+	if !hasAbility(d.DefensivesUsed, "Enraged Regeneration") {
 		t.Errorf("Enraged Regeneration debería figurar como usado: %v", d.DefensivesUsed)
 	}
 }
@@ -79,7 +88,7 @@ func TestDeathPriestSlowAvoidable(t *testing.T) {
 	if has(d.Flags, "mechanic") || has(d.Flags, "mechanic_high") {
 		t.Errorf("no should be a mechanic death: %v (%.1f%%)", d.Flags, d.WindowPct)
 	}
-	if !has(d.Flags, "avoidable") || !has(d.DefensivesAvailable, "Dispersion") {
+	if !has(d.Flags, "avoidable") || !hasAbility(d.DefensivesAvailable, "Dispersion") {
 		t.Errorf("debería ser evitable con Dispersion: %v %v", d.Flags, d.DefensivesAvailable)
 	}
 }

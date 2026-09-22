@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import type { PlayerRef } from "@/lib/types";
+import type { AbilityRef, PlayerRef } from "@/lib/types";
 
 type Tone = "bad" | "warn" | "info" | "ok";
 
@@ -84,6 +84,18 @@ export function AbilityLabel({ name, icon, abilityId }: { name: string; icon?: s
     >
       {content}
     </a>
+  );
+}
+
+/** A row of AbilityLabel chips, for lists of player abilities (defensives, consumables...). */
+export function AbilityRefList({ items, empty = "none" }: { items: AbilityRef[]; empty?: string }) {
+  if (!items.length) return <Muted>{empty}</Muted>;
+  return (
+    <span className="flex flex-wrap items-center gap-x-3 gap-y-1">
+      {items.map((x, i) => (
+        <AbilityLabel key={x.abilityId || `${x.name}-${i}`} name={x.name} icon={x.abilityIcon} abilityId={x.abilityId} />
+      ))}
+    </span>
   );
 }
 

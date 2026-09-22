@@ -163,6 +163,20 @@ func (a *Analyzer) abilityIcon(id int) string {
 	return a.fd.Abilities[id].Icon
 }
 
+// defRef arma la referencia (nombre/id/icono) de un defensivo/externo de la config.
+// El icono puede venir vacío si la habilidad no aparece en masterData (el
+// jugador no la lanzó en el reporte); el frontend usa un icono de reserva.
+func (a *Analyzer) defRef(d config.Defensive) AbilityRef {
+	return AbilityRef{Name: d.Name, AbilityID: d.ID, AbilityIcon: a.abilityIcon(d.ID)}
+}
+
+// consumableRef arma la referencia de un consumible de la config (icono
+// opcional en la config; sin id fiable porque healthstones/pociones cambian
+// de spellID entre niveles de objeto y expansiones).
+func (a *Analyzer) consumableRef(c config.Consumable) AbilityRef {
+	return AbilityRef{Name: c.Name, AbilityID: c.ID, AbilityIcon: c.Icon}
+}
+
 func (a *Analyzer) rel(ts int64) int64 { return ts - a.start }
 
 func (a *Analyzer) ms(sec float64) int64 { return int64(sec * 1000) }
@@ -305,14 +319,14 @@ func (a *Analyzer) consumableUsedBefore(pid, idx int, t int64) bool {
 	return false
 }
 
-func (a *Analyzer) consumablesAvailable(pid int, t int64) []string {
-	var out []string
+func (a *Analyzer) consumablesAvailable(pid int, t int64) []AbilityRef {
+	var out []AbilityRef
 	for i, c := range a.cfg.Consumables {
 		if c.RequiresClassInRaid != "" && !a.classes[c.RequiresClassInRaid] {
 			continue
 		}
 		if !a.consumableUsedBefore(pid, i, t) {
-			out = append(out, c.Name)
+			out = append(out, a.consumableRef(c))
 		}
 	}
 	return out

@@ -1,6 +1,6 @@
 import type { AnalysisResult, DeathReport } from "@/lib/types";
 import { compact, mmss, pct } from "@/lib/format";
-import { AbilityLabel, Badge, Note, PlayerLabel } from "@/components/ui";
+import { AbilityLabel, AbilityRefList, Badge, Note, PlayerLabel } from "@/components/ui";
 
 function DeathBadges({ d }: { d: DeathReport }) {
   return (
@@ -25,8 +25,6 @@ function Row({ label, children }: { label: string; children: React.ReactNode }) 
     </>
   );
 }
-
-const list = (items: string[]) => (items.length ? items.join(", ") : "none");
 
 export function DeathsTab({ result }: { result: AnalysisResult }) {
   if (!result.deaths.length) return <Note>No deaths in this fight.</Note>;
@@ -75,16 +73,31 @@ export function DeathsTab({ result }: { result: AnalysisResult }) {
               )}
             </Row>
             <Row label="Defensives available">
-              <b>{list(d.defensivesAvailable)}</b>
+              <b>
+                <AbilityRefList items={d.defensivesAvailable} />
+              </b>
             </Row>
-            <Row label="Defensives used (recent)">{list(d.defensivesUsed)}</Row>
+            <Row label="Defensives used (recent)">
+              <AbilityRefList items={d.defensivesUsed} />
+            </Row>
             <Row label="HS / potion available">
-              <b>{list(d.consumablesAvailable)}</b>
+              <b>
+                <AbilityRefList items={d.consumablesAvailable} />
+              </b>
             </Row>
             <Row label="External / raid CDs">
-              {d.externalsAvailable.length
-                ? d.externalsAvailable.map((e) => `${e.ability} (${e.caster})`).join(", ")
-                : "none"}
+              {d.externalsAvailable.length ? (
+                <span className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                  {d.externalsAvailable.map((e, i) => (
+                    <span key={i} className="inline-flex items-center gap-1">
+                      <AbilityLabel name={e.ability} icon={e.abilityIcon} abilityId={e.abilityId} />
+                      <span>({e.caster})</span>
+                    </span>
+                  ))}
+                </span>
+              ) : (
+                "none"
+              )}
             </Row>
           </div>
         </article>

@@ -12,6 +12,14 @@ type Options struct {
 	AssumeTalents bool // contar defensivos con talento aunque el jugador no los haya usado
 }
 
+// AbilityRef nombra una habilidad con su icono, para que el frontend pueda
+// mostrar el icono y enlazar su tooltip (Wowhead).
+type AbilityRef struct {
+	Name        string `json:"name"`
+	AbilityID   int    `json:"abilityId"`
+	AbilityIcon string `json:"abilityIcon"`
+}
+
 type AbilityDamage struct {
 	Ability     string  `json:"ability"`
 	AbilityID   int     `json:"abilityId"`
@@ -23,9 +31,11 @@ type AbilityDamage struct {
 }
 
 type ExternalOption struct {
-	Ability string `json:"ability"`
-	Caster  string `json:"caster"`
-	Kind    string `json:"kind"`
+	Ability     string `json:"ability"`
+	AbilityID   int    `json:"abilityId"`
+	AbilityIcon string `json:"abilityIcon"`
+	Caster      string `json:"caster"`
+	Kind        string `json:"kind"`
 }
 
 // DeathReport describe una muerte y por qué se marca (o no).
@@ -45,9 +55,9 @@ type DeathReport struct {
 	TopSources         []AbilityDamage `json:"topSources"`
 	AvoidableShare     float64         `json:"avoidableShare"` // % del daño de la ventana de habilidades evitables conocidas
 
-	DefensivesAvailable  []string         `json:"defensivesAvailable"`
-	DefensivesUsed       []string         `json:"defensivesUsed"`
-	ConsumablesAvailable []string         `json:"consumablesAvailable"`
+	DefensivesAvailable  []AbilityRef     `json:"defensivesAvailable"`
+	DefensivesUsed       []AbilityRef     `json:"defensivesUsed"`
+	ConsumablesAvailable []AbilityRef     `json:"consumablesAvailable"`
 	ExternalsAvailable   []ExternalOption `json:"externalsAvailable"`
 
 	// Flags: "avoidable", "mechanic", "mechanic_high", "avoidable_damage".
@@ -116,25 +126,27 @@ type PlayerActivity struct {
 }
 
 type CooldownUse struct {
-	Name     string  `json:"name"`
-	Kind     string  `json:"kind"`
-	Cooldown float64 `json:"cooldown"`
-	Possible int     `json:"possible"`
-	Used     int     `json:"used"`
-	UsedAtMs []int64 `json:"usedAtMs"`
-	Missed   int     `json:"missedOpportunities"` // picos de daño con el CD disponible y sin usar
+	Name        string  `json:"name"`
+	AbilityID   int     `json:"abilityId"`
+	AbilityIcon string  `json:"abilityIcon"`
+	Kind        string  `json:"kind"`
+	Cooldown    float64 `json:"cooldown"`
+	Possible    int     `json:"possible"`
+	Used        int     `json:"used"`
+	UsedAtMs    []int64 `json:"usedAtMs"`
+	Missed      int     `json:"missedOpportunities"` // picos de daño con el CD disponible y sin usar
 }
 
 type Spike struct {
-	StartMs   int64    `json:"startMs"`
-	EndMs     int64    `json:"endMs"`
-	Pct       float64  `json:"pct"` // % de HP máx recibido en la ventana
-	Top       string   `json:"top"`
-	TopIcon   string   `json:"topIcon"`
-	TopID     int      `json:"topAbilityId"`
-	Available []string `json:"available"` // defensivos personales disponibles y sin usar
-	Used      []string `json:"used"`
-	Died      bool     `json:"died"`
+	StartMs   int64        `json:"startMs"`
+	EndMs     int64        `json:"endMs"`
+	Pct       float64      `json:"pct"` // % de HP máx recibido en la ventana
+	Top       string       `json:"top"`
+	TopIcon   string       `json:"topIcon"`
+	TopID     int          `json:"topAbilityId"`
+	Available []AbilityRef `json:"available"` // defensivos personales disponibles y sin usar
+	Used      []AbilityRef `json:"used"`
+	Died      bool         `json:"died"`
 }
 
 type PlayerCooldowns struct {

@@ -88,7 +88,7 @@ func (a *Analyzer) analyzeCooldowns() []PlayerCooldowns {
 			s := Spike{
 				StartMs: a.rel(sp.start), EndMs: a.rel(sp.end), Pct: sp.pct,
 				Top: a.abilityName(sp.top), TopIcon: a.abilityIcon(sp.top), TopID: sp.top,
-				Available: []string{}, Used: []string{},
+				Available: []AbilityRef{}, Used: []AbilityRef{},
 			}
 			for _, ds := range a.deaths[p.ID] {
 				if ds >= sp.start && ds <= sp.end+1000 {
@@ -101,11 +101,11 @@ func (a *Analyzer) analyzeCooldowns() []PlayerCooldowns {
 				}
 				// disponible al inicio de la ventana, y no usado desde 2s antes hasta el final
 				if a.defUsedBetween(p.ID, d, sp.start-2000, sp.end) {
-					s.Used = append(s.Used, d.Name)
+					s.Used = append(s.Used, a.defRef(d))
 					continue
 				}
 				if a.defAvailable(p.ID, d, sp.start) {
-					s.Available = append(s.Available, d.Name)
+					s.Available = append(s.Available, a.defRef(d))
 					missedByDef[d.Name]++
 				}
 			}
@@ -116,7 +116,10 @@ func (a *Analyzer) analyzeCooldowns() []PlayerCooldowns {
 		var usedTot, possTot int
 		for _, d := range defs {
 			times := a.defCastTimes(p.ID, d)
-			cu := CooldownUse{Name: d.Name, Kind: d.Kind, Cooldown: d.Cooldown, UsedAtMs: []int64{}}
+			cu := CooldownUse{
+				Name: d.Name, AbilityID: d.ID, AbilityIcon: a.abilityIcon(d.ID),
+				Kind: d.Kind, Cooldown: d.Cooldown, UsedAtMs: []int64{},
+			}
 			cd := a.ms(d.Cooldown)
 			if cd > 0 {
 				cu.Possible = d.MaxCharges() + int(aliveMs/cd)

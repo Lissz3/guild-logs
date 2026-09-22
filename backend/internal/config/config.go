@@ -47,6 +47,11 @@ type Consumable struct {
 	Name                string `json:"name"`
 	Pattern             string `json:"pattern"`
 	RequiresClassInRaid string `json:"requiresClassInRaid"`
+	// ID e Icon son opcionales: no hay un solo spellID de "Healthstone" o
+	// "poción" válido para todas las expansiones/niveles de objeto, así que
+	// esto es solo para mostrar un icono/enlace representativo.
+	ID   int    `json:"id"`
+	Icon string `json:"icon"`
 }
 
 type Avoidable struct {

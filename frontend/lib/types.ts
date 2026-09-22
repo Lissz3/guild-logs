@@ -40,6 +40,12 @@ export interface PlayerRef {
   role: Role;
 }
 
+export interface AbilityRef {
+  name: string;
+  abilityId: number;
+  abilityIcon: string;
+}
+
 export interface AbilityDamage {
   ability: string;
   abilityId: number;
@@ -52,6 +58,8 @@ export interface AbilityDamage {
 
 export interface ExternalOption {
   ability: string;
+  abilityId: number;
+  abilityIcon: string;
   caster: string;
   kind: string;
 }
@@ -67,9 +75,9 @@ export interface DeathReport extends PlayerRef {
   windowSec: number;
   topSources: AbilityDamage[];
   avoidableShare: number;
-  defensivesAvailable: string[];
-  defensivesUsed: string[];
-  consumablesAvailable: string[];
+  defensivesAvailable: AbilityRef[];
+  defensivesUsed: AbilityRef[];
+  consumablesAvailable: AbilityRef[];
   externalsAvailable: ExternalOption[];
   flags: DeathFlag[];
   verdict: string;
@@ -126,6 +134,8 @@ export interface PlayerActivity extends PlayerRef {
 
 export interface CooldownUse {
   name: string;
+  abilityId: number;
+  abilityIcon: string;
   kind: "personal" | "external" | "raid";
   cooldown: number;
   possible: number;
@@ -141,8 +151,8 @@ export interface Spike {
   top: string;
   topIcon: string;
   topAbilityId: number;
-  available: string[];
-  used: string[];
+  available: AbilityRef[];
+  used: AbilityRef[];
   died: boolean;
 }
 

@@ -46,8 +46,8 @@ func (a *Analyzer) analyzeDeath(e model.Event, ignored bool) DeathReport {
 	r := DeathReport{
 		PlayerID: p.ID, Player: p.Name, Class: p.Class, Spec: p.Spec, Role: p.Role,
 		TimeMs: a.rel(t), WindowSec: a.t.WindowSec, Ignored: ignored,
-		DefensivesAvailable: []string{}, DefensivesUsed: []string{},
-		ConsumablesAvailable: []string{}, ExternalsAvailable: []ExternalOption{}, TopSources: []AbilityDamage{},
+		DefensivesAvailable: []AbilityRef{}, DefensivesUsed: []AbilityRef{},
+		ConsumablesAvailable: []AbilityRef{}, ExternalsAvailable: []ExternalOption{}, TopSources: []AbilityDamage{},
 		Flags: []string{},
 	}
 	if e.KillingAbilityGameID != 0 {
@@ -108,10 +108,10 @@ func (a *Analyzer) analyzeDeath(e model.Event, ignored bool) DeathReport {
 			continue
 		}
 		if a.defUsedBetween(p.ID, d, t-lookback, t) {
-			r.DefensivesUsed = append(r.DefensivesUsed, d.Name)
+			r.DefensivesUsed = append(r.DefensivesUsed, a.defRef(d))
 		}
 		if a.defAvailable(p.ID, d, t) {
-			r.DefensivesAvailable = append(r.DefensivesAvailable, d.Name)
+			r.DefensivesAvailable = append(r.DefensivesAvailable, a.defRef(d))
 		}
 	}
 	r.ConsumablesAvailable = append(r.ConsumablesAvailable, a.consumablesAvailable(p.ID, t)...)
@@ -123,7 +123,9 @@ func (a *Analyzer) analyzeDeath(e model.Event, ignored bool) DeathReport {
 		}
 		for _, d := range a.owned[o.ID] {
 			if (d.Kind == "external" || d.Kind == "raid") && a.defAvailable(o.ID, d, t) {
-				r.ExternalsAvailable = append(r.ExternalsAvailable, ExternalOption{Ability: d.Name, Caster: o.Name, Kind: d.Kind})
+				r.ExternalsAvailable = append(r.ExternalsAvailable, ExternalOption{
+					Ability: d.Name, AbilityID: d.ID, AbilityIcon: a.abilityIcon(d.ID), Caster: o.Name, Kind: d.Kind,
+				})
 			}
 		}
 	}
@@ -146,7 +148,13 @@ func (a *Analyzer) analyzeDeath(e model.Event, ignored bool) DeathReport {
 
 func (a *Analyzer) verdict(r DeathReport) string {
 	var parts []string
-	avail := append(append([]string{}, r.DefensivesAvailable...), r.ConsumablesAvailable...)
+	avail := make([]string, 0, len(r.DefensivesAvailable)+len(r.ConsumablesAvailable))
+	for _, x := range r.DefensivesAvailable {
+		avail = append(avail, x.Name)
+	}
+	for _, x := range r.ConsumablesAvailable {
+		avail = append(avail, x.Name)
+	}
 	mech := contains(r.Flags, "mechanic") || contains(r.Flags, "mechanic_high")
 	switch {
 	case contains(r.Flags, "avoidable") && mech:
