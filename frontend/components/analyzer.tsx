@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { analyze, fightFromUrl, getConfig, getReport } from "@/lib/api";
 import { DIFFICULTY, mmss } from "@/lib/format";
 import type { AnalysisOptions, AnalysisResult, ReportMeta } from "@/lib/types";
 import { Card, InfoTip } from "@/components/ui";
 import { SummaryTab } from "@/components/tabs/summary-tab";
-import { DeathsTab } from "@/components/tabs/deaths-tab";
+import { DeathsTab, type DeathHighlight } from "@/components/tabs/deaths-tab";
 import { AvoidableTab } from "@/components/tabs/avoidable-tab";
 import { ActivityTab } from "@/components/tabs/activity-tab";
 import { CooldownsTab } from "@/components/tabs/cooldowns-tab";
@@ -67,7 +67,14 @@ export function Analyzer() {
   const [opts, setOpts] = useState<AnalysisOptions>(DEFAULT_OPTIONS);
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [tab, setTab] = useState<TabId>("summary");
+  const [highlightDeath, setHighlightDeath] = useState<DeathHighlight | null>(null);
   const [busy, setBusy] = useState(false);
+
+  const goToDeath = useCallback((playerId: number, timeMs: number) => {
+    setTab("deaths");
+    setHighlightDeath({ playerId, timeMs });
+  }, []);
+  const clearHighlightDeath = useCallback(() => setHighlightDeath(null), []);
   const request = useRef(0); // ignore responses from superseded requests
 
   useEffect(() => {
@@ -302,8 +309,10 @@ export function Analyzer() {
               </button>
             ))}
           </nav>
-          {tab === "summary" && <SummaryTab result={result} />}
-          {tab === "deaths" && <DeathsTab result={result} />}
+          {tab === "summary" && <SummaryTab result={result} onGoToDeath={goToDeath} />}
+          {tab === "deaths" && (
+            <DeathsTab result={result} highlight={highlightDeath} onHighlightShown={clearHighlightDeath} />
+          )}
           {tab === "avoidable" && <AvoidableTab result={result} />}
           {tab === "activity" && <ActivityTab result={result} />}
           {tab === "cooldowns" && <CooldownsTab result={result} />}

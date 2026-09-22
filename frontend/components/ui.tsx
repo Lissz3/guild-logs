@@ -231,8 +231,16 @@ export function TD({
   );
 }
 
-export function TR({ children }: { children: ReactNode }) {
-  return <tr className="group">{children}</tr>;
+export function TR({
+  children,
+  className = "",
+  ...rest
+}: React.HTMLAttributes<HTMLTableRowElement> & { children: ReactNode }) {
+  return (
+    <tr className={`group ${className}`} {...rest}>
+      {children}
+    </tr>
+  );
 }
 
 export function UptimeBar({ value }: { value: number }) {

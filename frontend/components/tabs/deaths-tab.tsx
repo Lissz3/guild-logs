@@ -1,6 +1,16 @@
+import { useEffect } from "react";
 import type { AnalysisResult, DeathReport } from "@/lib/types";
 import { compact, mmss, pct } from "@/lib/format";
 import { AbilityLabel, AbilityRefList, Badge, Note, PlayerLabel } from "@/components/ui";
+
+export function deathElementId(playerId: number, timeMs: number) {
+  return `death-${playerId}-${timeMs}`;
+}
+
+export interface DeathHighlight {
+  playerId: number;
+  timeMs: number;
+}
 
 function DeathBadges({ d }: { d: DeathReport }) {
   return (
@@ -26,21 +36,47 @@ function Row({ label, children }: { label: string; children: React.ReactNode }) 
   );
 }
 
-export function DeathsTab({ result }: { result: AnalysisResult }) {
+export function DeathsTab({
+  result,
+  highlight,
+  onHighlightShown,
+}: {
+  result: AnalysisResult;
+  highlight?: DeathHighlight | null;
+  onHighlightShown?: () => void;
+}) {
+  useEffect(() => {
+    if (!highlight) return;
+    document.getElementById(deathElementId(highlight.playerId, highlight.timeMs))?.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+    });
+    // Keep the highlight visible briefly, then let it fade — otherwise it'd
+    // reappear every time this tab remounts (e.g. clicking the Deaths tab
+    // again later) instead of just once, right after a summary-row click.
+    const t = setTimeout(() => onHighlightShown?.(), 2000);
+    return () => clearTimeout(t);
+  }, [highlight, onHighlightShown]);
+
   if (!result.deaths.length) return <Note>No deaths in this fight.</Note>;
   return (
     <>
-      {result.deaths.map((d, i) => (
+      {result.deaths.map((d, i) => {
+        const isHighlighted = highlight?.playerId === d.playerId && highlight?.timeMs === d.timeMs;
+        return (
         <article
           key={`${d.playerId}-${d.timeMs}-${i}`}
-          className={`mb-2.5 rounded-xl border border-line bg-surface px-3.5 py-3 ${d.ignored ? "opacity-60" : ""}`}
+          id={deathElementId(d.playerId, d.timeMs)}
+          className={`mb-2.5 rounded-xl border px-3.5 py-3 transition-colors ${d.ignored ? "opacity-60" : ""} ${
+            isHighlighted ? "border-series bg-series/10" : "border-line bg-surface"
+          }`}
         >
           <div className="flex flex-wrap items-baseline gap-2.5">
-            <span className="tabular-nums text-fg-2">{mmss(d.timeMs)}</span>
             <PlayerLabel p={d} />
             <span>
               <DeathBadges d={d} />
             </span>
+            <span className="ml-auto tabular-nums text-fg-2">{mmss(d.timeMs)}</span>
           </div>
           <div className="my-1.5">{d.verdict}</div>
           <div className="grid grid-cols-1 gap-x-3 gap-y-0.5 text-[13px] text-fg-2 sm:grid-cols-[190px_1fr] [&>span:nth-child(even)]:text-fg">
@@ -101,7 +137,8 @@ export function DeathsTab({ result }: { result: AnalysisResult }) {
             </Row>
           </div>
         </article>
-      ))}
+        );
+      })}
     </>
   );
 }
