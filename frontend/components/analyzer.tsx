@@ -75,11 +75,14 @@ export function Analyzer() {
       .then((c) => {
         setOpts((o) => ({
           ...o,
-          window: c.thresholds.windowSec,
-          mechanicPct: c.thresholds.mechanicPct,
-          spikePct: c.thresholds.spikePct,
-          gapSec: c.thresholds.gapSec,
-          wipeIgnoreDeaths: c.thresholds.wipeIgnoreAfterDeaths,
+          // ?? keeps the current value when the server response is missing a field
+          // (e.g. an older Go build without a newer threshold) instead of blanking
+          // the input to undefined, which would break React's controlled inputs.
+          window: c.thresholds.windowSec ?? o.window,
+          mechanicPct: c.thresholds.mechanicPct ?? o.mechanicPct,
+          spikePct: c.thresholds.spikePct ?? o.spikePct,
+          gapSec: c.thresholds.gapSec ?? o.gapSec,
+          wipeIgnoreDeaths: c.thresholds.wipeIgnoreAfterDeaths ?? o.wipeIgnoreDeaths,
         }));
         if (!c.wclConfigured) {
           setStatus({
@@ -141,7 +144,7 @@ export function Analyzer() {
         min={min}
         max={max}
         step={step}
-        value={opts[key] as number}
+        value={(opts[key] as number) ?? 0}
         onChange={(e) => setOpts({ ...opts, [key]: Number(e.target.value) })}
       />
     </Field>
