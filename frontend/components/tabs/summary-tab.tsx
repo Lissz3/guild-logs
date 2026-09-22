@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import type { AnalysisResult, PlayerSummary } from "@/lib/types";
-import { DIFFICULTY, mmss, pct, ROLE_LABEL } from "@/lib/format";
+import { DIFFICULTY, mmss, pct } from "@/lib/format";
 import { Badge, Muted, Note, PlayerLabel, Table, Tile, TD, TH, TR } from "@/components/ui";
 
 type SortKey = keyof PlayerSummary | "score";
@@ -32,7 +32,7 @@ export function SummaryTab({ result }: { result: AnalysisResult }) {
       onClick={() =>
         setSort((cur) => ({
           key,
-          dir: cur.key === key ? (cur.dir === 1 ? -1 : 1) : key === "player" || key === "role" ? 1 : -1,
+          dir: cur.key === key ? (cur.dir === 1 ? -1 : 1) : key === "player" ? 1 : -1,
         }))
       }
     >
@@ -57,7 +57,6 @@ export function SummaryTab({ result }: { result: AnalysisResult }) {
         <thead>
           <tr>
             {header("player", "Player", false)}
-            {header("role", "Role", false)}
             {header("deaths", "Deaths")}
             {header("avoidableDeaths", "Avoidable")}
             {header("mechanicDeaths", "Mechanic")}
@@ -73,7 +72,6 @@ export function SummaryTab({ result }: { result: AnalysisResult }) {
               <TD>
                 <PlayerLabel p={p} />
               </TD>
-              <TD>{ROLE_LABEL[p.role]}</TD>
               <TD num>{p.deaths || "–"}</TD>
               <TD num>{p.avoidableDeaths ? <Badge tone="bad">{p.avoidableDeaths}</Badge> : "–"}</TD>
               <TD num>{p.mechanicDeaths ? <Badge tone="warn">{p.mechanicDeaths}</Badge> : "–"}</TD>

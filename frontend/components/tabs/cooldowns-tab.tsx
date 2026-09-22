@@ -1,5 +1,5 @@
 import type { AnalysisResult } from "@/lib/types";
-import { KIND_LABEL, mmss, pct, ROLE_LABEL } from "@/lib/format";
+import { KIND_LABEL, mmss, pct } from "@/lib/format";
 import { AbilityLabel, AbilityRefList, Badge, Muted, Note, PlayerLabel, Table, TD, TH, TR } from "@/components/ui";
 
 export function CooldownsTab({ result }: { result: AnalysisResult }) {
@@ -17,10 +17,11 @@ export function CooldownsTab({ result }: { result: AnalysisResult }) {
         <div key={p.playerId} className="mb-4">
           <h3 className="mb-2 font-semibold">
             <PlayerLabel p={p} />
-            <span className="ml-1.5 text-[13px] font-normal text-fg-2">
-              {ROLE_LABEL[p.role]}
-              {p.usePct ? ` · personal defensive use ${pct(p.usePct)}` : ""}
-            </span>
+            {p.usePct > 0 && (
+              <span className="ml-1.5 text-[13px] font-normal text-fg-2">
+                personal defensive use {pct(p.usePct)}
+              </span>
+            )}
           </h3>
 
           {p.cooldowns.length > 0 && (

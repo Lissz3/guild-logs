@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
-import type { AbilityRef, PlayerRef } from "@/lib/types";
+import type { AbilityRef, PlayerRef, Role } from "@/lib/types";
+import { CLASS_COLORS, specIcon } from "@/lib/wow";
 
 type Tone = "bad" | "warn" | "info" | "ok";
 
@@ -24,7 +25,7 @@ export function Card({ children, className = "" }: { children: ReactNode; classN
 
 export function Tile({ value, label }: { value: ReactNode; label: string }) {
   return (
-    <div className="rounded-xl border border-line bg-surface px-3.5 py-3">
+    <div className="rounded-xl border border-line bg-surface px-3.5 py-3 text-center">
       <div className="text-3xl font-semibold">{value}</div>
       <div className="text-sm text-fg-2">{label}</div>
     </div>
@@ -120,14 +121,67 @@ export function AbilityRefList({ items, empty = "none" }: { items: AbilityRef[];
   );
 }
 
-export function PlayerLabel({ p }: { p: Pick<PlayerRef, "player" | "spec" | "class"> }) {
+const ROLE_LABEL_LONG: Record<Role, string> = { tank: "Tank", healer: "Healer", dps: "DPS" };
+
+// Role icons: shield/cross/swords, tinted with the same semantic colors used
+// for badges elsewhere (info=tank, ok=healer, bad=dps) so they read at a glance.
+function RoleIcon({ role }: { role: Role }) {
+  const cls = `h-5 w-5 shrink-0 ${role === "tank" ? "text-info" : role === "healer" ? "text-ok" : "text-bad"}`;
+  const title = ROLE_LABEL_LONG[role];
+  if (role === "tank") {
+    return (
+      <svg viewBox="0 0 24 24" className={cls} fill="currentColor" aria-label={title}>
+        <title>{title}</title>
+        <path d="M12 2 4 5.5v5.5c0 5.2 3.4 9.4 8 10.9 4.6-1.5 8-5.7 8-10.9V5.5L12 2Z" />
+      </svg>
+    );
+  }
+  if (role === "healer") {
+    return (
+      <svg viewBox="0 0 24 24" className={cls} fill="currentColor" aria-label={title}>
+        <title>{title}</title>
+        <path d="M9.5 2h5v7.5H22v5h-7.5V22h-5v-7.5H2v-5h7.5V2Z" />
+      </svg>
+    );
+  }
+  // A single upright sword, built from plain shapes (blade/guard/hilt/pommel)
+  // rather than one hand-written path, so it stays a recognizable silhouette.
   return (
-    <>
-      <b>{p.player}</b>{" "}
-      <span className="text-fg-3">
-        {p.spec} {p.class}
-      </span>
-    </>
+    <svg viewBox="0 0 24 24" className={cls} fill="currentColor" aria-label={title}>
+      <title>{title}</title>
+      <polygon points="12,1 14.5,4 14.5,15 9.5,15 9.5,4" />
+      <rect x="6.5" y="15" width="11" height="2.2" rx="0.8" />
+      <rect x="10.4" y="17.2" width="3.2" height="4.3" rx="1" />
+      <circle cx="12" cy="22.2" r="1.3" />
+    </svg>
+  );
+}
+
+export function PlayerLabel({ p }: { p: Pick<PlayerRef, "player" | "spec" | "class" | "role"> }) {
+  const color = CLASS_COLORS[p.class];
+  const icon = specIcon(p.class, p.spec);
+  return (
+    <span className="inline-flex items-center gap-2 align-middle">
+      <RoleIcon role={p.role} />
+      {icon && (
+        <img
+          src={iconUrl(icon)}
+          alt=""
+          title={p.spec}
+          width={24}
+          height={24}
+          loading="lazy"
+          className="h-6 w-6 shrink-0 rounded border border-line"
+          onError={(e) => {
+            const img = e.currentTarget;
+            if (img.src !== iconUrl(undefined)) img.src = iconUrl(undefined);
+          }}
+        />
+      )}
+      <b className="text-base" style={color ? { color } : undefined}>
+        {p.player}
+      </b>
+    </span>
   );
 }
 
