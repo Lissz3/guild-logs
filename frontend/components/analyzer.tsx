@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { analyze, fightFromUrl, getConfig, getReport } from "@/lib/api";
 import { DIFFICULTY, mmss } from "@/lib/format";
 import type { AnalysisOptions, AnalysisResult, ReportMeta } from "@/lib/types";
-import { Card } from "@/components/ui";
+import { Card, InfoTip } from "@/components/ui";
 import { SummaryTab } from "@/components/tabs/summary-tab";
 import { DeathsTab } from "@/components/tabs/deaths-tab";
 import { AvoidableTab } from "@/components/tabs/avoidable-tab";
@@ -28,10 +28,23 @@ const button =
   "rounded-md border border-series bg-series px-3.5 py-2 text-white hover:brightness-110 disabled:opacity-60";
 const buttonGhost = "rounded-md border border-series px-3.5 py-2 text-series hover:brightness-110 disabled:opacity-60";
 
-function Field({ label, children, className = "" }: { label: string; children: React.ReactNode; className?: string }) {
+function Field({
+  label,
+  hint,
+  children,
+  className = "",
+}: {
+  label: string;
+  hint?: string;
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
     <label className={`flex flex-col gap-1 text-[13px] text-fg-2 ${className}`}>
-      {label}
+      <span className="inline-flex items-center gap-1">
+        {label}
+        {hint && <InfoTip text={hint} />}
+      </span>
       {children}
     </label>
   );
@@ -110,8 +123,8 @@ export function Analyzer() {
     }
   }
 
-  const num = (key: keyof AnalysisOptions, min: number, max: number, step: number, label: string) => (
-    <Field label={label}>
+  const num = (key: keyof AnalysisOptions, min: number, max: number, step: number, label: string, hint: string) => (
+    <Field label={label} hint={hint}>
       <input
         className={`${input} w-28`}
         type="number"
@@ -192,20 +205,48 @@ export function Analyzer() {
                 ))}
               </select>
             </Field>
-            {num("window", 1, 30, 1, "Lookback window (s)")}
-            {num("mechanicPct", 10, 200, 5, "Mechanic death (% HP)")}
-            {num("spikePct", 10, 200, 5, "Damage spike (% HP)")}
-            {num("gapSec", 1, 20, 0.5, "Min. gap (s)")}
-            <label
-              className="flex items-center gap-1.5 pb-2 text-[13px] text-fg-2"
-              title="Count talent-gated defensives even if the player did not use them in the fight"
-            >
+            {num(
+              "window",
+              1,
+              30,
+              1,
+              "Lookback window (s)",
+              "How many seconds of damage before a death to look at when picking the killing blow's top sources and deciding the verdict.",
+            )}
+            {num(
+              "mechanicPct",
+              10,
+              200,
+              5,
+              "Mechanic death (% HP)",
+              "A death is flagged as a mechanic death when the player took at least this % of their max HP during the lookback window.",
+            )}
+            {num(
+              "spikePct",
+              10,
+              200,
+              5,
+              "Damage spike (% HP)",
+              "A window where the player took at least this % of max HP counts as a damage spike, used to check whether a personal defensive was available and went unused.",
+            )}
+            {num(
+              "gapSec",
+              1,
+              20,
+              0.5,
+              "Min. gap (s)",
+              "In the Activity tab, downtime gaps at least this long are listed individually.",
+            )}
+            <label className="flex items-center gap-1.5 pb-2 text-[13px] text-fg-2">
               <input
                 type="checkbox"
                 checked={opts.assumeTalents}
                 onChange={(e) => setOpts({ ...opts, assumeTalents: e.target.checked })}
               />
-              Assume talents
+              <span className="inline-flex items-center gap-1">
+                Assume talents
+                <InfoTip text="Count talent-gated defensives as owned even if the player never used them in this fight." />
+              </span>
             </label>
             <button className={button} type="submit" disabled={busy || fightId === null}>
               Analyze

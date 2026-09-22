@@ -87,6 +87,27 @@ export function AbilityLabel({ name, icon, abilityId }: { name: string; icon?: s
   );
 }
 
+/** Small "?" badge; hovering (or focusing, for keyboard/touch) shows an explanatory tooltip. */
+export function InfoTip({ text }: { text: string }) {
+  return (
+    <span
+      tabIndex={0}
+      // Stop clicks from reaching an ancestor <label>/<button> — this badge is a
+      // hover/focus affordance only, it must never trigger a parent control.
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      }}
+      className="group/tip relative inline-flex h-3.5 w-3.5 cursor-help items-center justify-center rounded-full border border-line text-[10px] leading-none text-fg-3 outline-none"
+    >
+      ?
+      <span className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-1.5 w-max max-w-[240px] -translate-x-1/2 rounded-md border border-line bg-surface px-2 py-1.5 text-xs font-normal normal-case whitespace-normal text-fg opacity-0 shadow-md transition-opacity group-hover/tip:opacity-100 group-focus/tip:opacity-100">
+        {text}
+      </span>
+    </span>
+  );
+}
+
 /** A row of AbilityLabel chips, for lists of player abilities (defensives, consumables...). */
 export function AbilityRefList({ items, empty = "none" }: { items: AbilityRef[]; empty?: string }) {
   if (!items.length) return <Muted>{empty}</Muted>;
