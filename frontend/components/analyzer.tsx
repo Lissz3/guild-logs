@@ -294,7 +294,7 @@ export function Analyzer() {
                 role="tab"
                 aria-selected={tab === t.id}
                 onClick={() => setTab(t.id)}
-                className={`-mb-px border-b-2 px-3.5 py-2.5 whitespace-nowrap ${
+                className={`border-b-2 px-3.5 py-2.5 whitespace-nowrap ${
                   tab === t.id ? "border-series font-semibold text-fg" : "border-transparent text-fg-2 hover:text-fg"
                 }`}
               >
