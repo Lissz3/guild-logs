@@ -166,9 +166,7 @@ func (a *Analyzer) verdict(r DeathReport) string {
 	if contains(r.Flags, "avoidable_damage") {
 		parts = append(parts, fmt.Sprintf("%.0f%% of the damage came from avoidable abilities.", r.AvoidableShare))
 	}
-	if len(r.ExternalsAvailable) > 0 && contains(r.Flags, "mechanic_high") {
-		parts = append(parts, "External/raid cooldowns were available.")
-	}
+
 	if r.Ignored {
 		parts = append(parts, "(After the wipe point: not counted.)")
 	}

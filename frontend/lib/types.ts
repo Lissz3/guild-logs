@@ -57,14 +57,6 @@ export interface AbilityDamage {
   avoidable: boolean;
 }
 
-export interface ExternalOption {
-  ability: string;
-  abilityId: number;
-  abilityIcon: string;
-  caster: string;
-  kind: string;
-}
-
 export type DeathFlag = "avoidable" | "mechanic" | "mechanic_high" | "avoidable_damage";
 
 export interface DeathReport extends PlayerRef {
@@ -79,7 +71,6 @@ export interface DeathReport extends PlayerRef {
   defensivesAvailable: AbilityRef[];
   defensivesUsed: AbilityRef[];
   consumablesAvailable: AbilityRef[];
-  externalsAvailable: ExternalOption[];
   flags: DeathFlag[];
   verdict: string;
   ignored: boolean;

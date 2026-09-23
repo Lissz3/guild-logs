@@ -121,20 +121,6 @@ export function DeathsTab({
                 <AbilityRefList items={d.consumablesAvailable} />
               </b>
             </Row>
-            <Row label="External / raid CDs">
-              {d.externalsAvailable.length ? (
-                <span className="flex flex-wrap items-center gap-x-3 gap-y-1">
-                  {d.externalsAvailable.map((e, i) => (
-                    <span key={i} className="inline-flex items-center gap-1">
-                      <AbilityLabel name={e.ability} icon={e.abilityIcon} abilityId={e.abilityId} />
-                      <span>({e.caster})</span>
-                    </span>
-                  ))}
-                </span>
-              ) : (
-                "none"
-              )}
-            </Row>
           </div>
         </article>
         );
