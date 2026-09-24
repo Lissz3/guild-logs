@@ -55,16 +55,27 @@ function iconUrl(icon?: string) {
  * into the real Wowhead tooltip (full description, cooldown, etc.) — WCL's
  * API only exposes name/icon, not ability text.
  */
-export function AbilityLabel({ name, icon, abilityId }: { name: string; icon?: string; abilityId?: number }) {
+export function AbilityLabel({
+  name,
+  icon,
+  abilityId,
+  size = 20,
+}: {
+  name: string;
+  icon?: string;
+  abilityId?: number;
+  size?: number;
+}) {
   const content = (
     <>
       <img
         src={iconUrl(icon)}
         alt=""
-        width={20}
-        height={20}
+        width={size}
+        height={size}
         loading="lazy"
-        className="h-5 w-5 shrink-0 rounded border border-line align-middle"
+        className="shrink-0 rounded border border-line align-middle"
+        style={{ width: size, height: size }}
         onError={(e) => {
           const img = e.currentTarget;
           if (img.src !== iconUrl(undefined)) img.src = iconUrl(undefined);
@@ -110,12 +121,26 @@ export function InfoTip({ text }: { text: string }) {
 }
 
 /** A row of AbilityLabel chips, for lists of player abilities (defensives, consumables...). */
-export function AbilityRefList({ items, empty = "none" }: { items: AbilityRef[]; empty?: string }) {
+export function AbilityRefList({
+  items,
+  empty = "none",
+  size,
+}: {
+  items: AbilityRef[];
+  empty?: string;
+  size?: number;
+}) {
   if (!items.length) return <Muted>{empty}</Muted>;
   return (
     <span className="flex flex-wrap items-center gap-x-3 gap-y-1">
       {items.map((x, i) => (
-        <AbilityLabel key={x.abilityId || `${x.name}-${i}`} name={x.name} icon={x.abilityIcon} abilityId={x.abilityId} />
+        <AbilityLabel
+          key={x.abilityId || `${x.name}-${i}`}
+          name={x.name}
+          icon={x.abilityIcon}
+          abilityId={x.abilityId}
+          size={size}
+        />
       ))}
     </span>
   );

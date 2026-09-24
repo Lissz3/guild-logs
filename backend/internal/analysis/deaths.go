@@ -153,8 +153,7 @@ func (a *Analyzer) verdict(r DeathReport) string {
 	mech := contains(r.Flags, "mechanic") || contains(r.Flags, "mechanic_high")
 	switch {
 	case contains(r.Flags, "avoidable") && mech:
-		parts = append(parts, fmt.Sprintf("Mechanic death (%.0f%% of max HP in %.0fs) with cooldowns left unused: %s.",
-			r.WindowPct, r.WindowSec, strings.Join(avail, ", ")))
+		parts = append(parts, fmt.Sprintf("Mechanic death (%.0f%% of max HP in %.0fs).", r.WindowPct, r.WindowSec))
 	case contains(r.Flags, "avoidable"):
 		parts = append(parts, fmt.Sprintf("Avoidable death: had %s available.", strings.Join(avail, ", ")))
 	case mech:
