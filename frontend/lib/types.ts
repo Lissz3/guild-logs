@@ -158,9 +158,11 @@ export interface PlayerCooldowns extends PlayerRef {
 
 export interface PlayerSummary extends PlayerRef {
   deaths: number;
+  deathTimestamps: number[];
   avoidableDeaths: number;
   mechanicDeaths: number;
   uptimePct: number;
+  avoidableDamage: number;
   avoidablePct: number;
   cooldownUsePct: number;
   missedSpikes: number;
@@ -172,6 +174,7 @@ export interface Summary {
   avoidableDeaths: number;
   mechanicDeaths: number;
   avgUptimePct: number;
+  totalAvoidableDamage: number;
   players: PlayerSummary[];
 }
 

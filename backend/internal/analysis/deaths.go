@@ -83,9 +83,6 @@ func (a *Analyzer) analyzeDeath(e model.Event, ignored bool) DeathReport {
 		r.TopSources = append(r.TopSources, *ad)
 	}
 	sort.Slice(r.TopSources, func(i, j int) bool { return r.TopSources[i].Amount > r.TopSources[j].Amount })
-	if len(r.TopSources) > 5 {
-		r.TopSources = r.TopSources[:5]
-	}
 	r.WindowPct = a.pct(total, p.ID)
 	if total > 0 {
 		r.AvoidableShare = avoidable / total * 100

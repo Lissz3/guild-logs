@@ -340,7 +340,10 @@ func (a *Analyzer) summarize(r *Result) Summary {
 	s := Summary{Deaths: len(r.Deaths)}
 	byPlayer := map[int]*PlayerSummary{}
 	for _, p := range a.players {
-		byPlayer[p.ID] = &PlayerSummary{PlayerID: p.ID, Player: p.Name, Class: p.Class, Spec: p.Spec, Role: p.Role}
+		byPlayer[p.ID] = &PlayerSummary{
+			PlayerID: p.ID, Player: p.Name, Class: p.Class, Spec: p.Spec, Role: p.Role,
+			DeathTimestamps: []int64{},
+		}
 	}
 	for _, d := range r.Deaths {
 		if d.Ignored {
@@ -349,6 +352,7 @@ func (a *Analyzer) summarize(r *Result) Summary {
 		s.CountedDeaths++
 		ps := byPlayer[d.PlayerID]
 		ps.Deaths++
+		ps.DeathTimestamps = append(ps.DeathTimestamps, d.TimeMs)
 		if contains(d.Flags, "avoidable") {
 			s.AvoidableDeaths++
 			ps.AvoidableDeaths++
@@ -371,7 +375,10 @@ func (a *Analyzer) summarize(r *Result) Summary {
 		s.AvgUptimePct = sum / float64(n)
 	}
 	for _, x := range r.AvoidableDamage {
+		dmg := x.KnownTaken + x.PossibleTaken
 		byPlayer[x.PlayerID].AvoidablePct = x.AvoidablePct
+		byPlayer[x.PlayerID].AvoidableDamage = dmg
+		s.TotalAvoidableDamage += dmg
 	}
 	for _, x := range r.Cooldowns {
 		ps := byPlayer[x.PlayerID]

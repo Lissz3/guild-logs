@@ -176,5 +176,11 @@ func (s *server) handleAnalyze(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	writeJSON(w, 200, analysis.Analyze(s.cfg, fd, opt))
+	result := analysis.Analyze(s.cfg, fd, opt)
+	// The Summary tab is meant to be a fixed overview of the fight, not
+	// something that shifts as you tune the filter form for the other tabs —
+	// so it's always computed from the config's default thresholds, ignoring
+	// whatever the request overrode above.
+	result.Summary = analysis.Analyze(s.cfg, fd, analysis.Options{Thresholds: s.cfg.Thresholds}).Summary
+	writeJSON(w, 200, result)
 }

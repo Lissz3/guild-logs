@@ -125,9 +125,6 @@ func (a *Analyzer) analyzeAvoidable() ([]PlayerAvoidable, []AbilityAvoidable) {
 			}
 		}
 		sort.Slice(pa.Rows, func(i, j int) bool { return pa.Rows[i].Amount > pa.Rows[j].Amount })
-		if len(pa.Rows) > 8 {
-			pa.Rows = pa.Rows[:8]
-		}
 		if pa.TotalTaken > 0 {
 			pa.AvoidablePct = (pa.KnownTaken + pa.PossibleTaken) / pa.TotalTaken * 100
 		}

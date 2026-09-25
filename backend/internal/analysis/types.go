@@ -170,21 +170,24 @@ type PlayerSummary struct {
 	Spec            string  `json:"spec"`
 	Role            string  `json:"role"`
 	Deaths          int     `json:"deaths"`
+	DeathTimestamps []int64 `json:"deathTimestamps"` // timeMs de cada muerte contada (mismo run que Deaths)
 	AvoidableDeaths int     `json:"avoidableDeaths"`
 	MechanicDeaths  int     `json:"mechanicDeaths"`
 	UptimePct       float64 `json:"uptimePct"`
+	AvoidableDamage float64 `json:"avoidableDamage"` // known+possible, en daño absoluto (ver AvoidablePct para el %)
 	AvoidablePct    float64 `json:"avoidablePct"`
 	CooldownUsePct  float64 `json:"cooldownUsePct"`
 	MissedSpikes    int     `json:"missedSpikes"`
 }
 
 type Summary struct {
-	Deaths          int             `json:"deaths"`
-	CountedDeaths   int             `json:"countedDeaths"`
-	AvoidableDeaths int             `json:"avoidableDeaths"`
-	MechanicDeaths  int             `json:"mechanicDeaths"`
-	AvgUptimePct    float64         `json:"avgUptimePct"`
-	Players         []PlayerSummary `json:"players"`
+	Deaths               int             `json:"deaths"`
+	CountedDeaths        int             `json:"countedDeaths"`
+	AvoidableDeaths      int             `json:"avoidableDeaths"`
+	MechanicDeaths       int             `json:"mechanicDeaths"`
+	AvgUptimePct         float64         `json:"avgUptimePct"`
+	TotalAvoidableDamage float64         `json:"totalAvoidableDamage"` // suma de daño evitable/posible de toda la raid en el intento (no tanks)
+	Players              []PlayerSummary `json:"players"`
 }
 
 type FightInfo struct {
