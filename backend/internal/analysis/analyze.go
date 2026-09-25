@@ -171,9 +171,13 @@ func (a *Analyzer) defRef(d config.Defensive) AbilityRef {
 }
 
 // consumableRef arma la referencia de un consumible de la config (icono
-// opcional en la config; sin id fiable porque healthstones/pociones cambian
-// de spellID entre niveles de objeto y expansiones).
+// opcional en la config; los IDs cambian de nivel de objeto/expansión, así
+// que se revisan a mano cada temporada). ItemID (enlace a wowhead.com/item=)
+// tiene prioridad sobre ID (spellID, wowhead.com/spell=) cuando está presente.
 func (a *Analyzer) consumableRef(c config.Consumable) AbilityRef {
+	if c.ItemID != 0 {
+		return AbilityRef{Name: c.Name, AbilityID: c.ItemID, AbilityIcon: c.Icon, AbilityKind: "item"}
+	}
 	return AbilityRef{Name: c.Name, AbilityID: c.ID, AbilityIcon: c.Icon}
 }
 

@@ -45,6 +45,8 @@ export interface AbilityRef {
   name: string;
   abilityId: number;
   abilityIcon: string;
+  /** "item" links to wowhead.com/item=; anything else (usually absent) links to wowhead.com/spell=. */
+  abilityKind?: string;
 }
 
 export interface AbilityDamage {

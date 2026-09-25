@@ -47,11 +47,13 @@ type Consumable struct {
 	Name                string `json:"name"`
 	Pattern             string `json:"pattern"`
 	RequiresClassInRaid string `json:"requiresClassInRaid"`
-	// ID e Icon son opcionales: no hay un solo spellID de "Healthstone" o
-	// "poción" válido para todas las expansiones/niveles de objeto, así que
-	// esto es solo para mostrar un icono/enlace representativo.
-	ID   int    `json:"id"`
-	Icon string `json:"icon"`
+	// ID, ItemID e Icon son opcionales, y apuntan al objeto actual del tier
+	// (p.ej. la poción de curación de la temporada en curso), no a un ID
+	// estable entre expansiones/niveles de objeto. Revisar junto con
+	// `defensives` cada temporada.
+	ID     int    `json:"id"`     // spellID del efecto "Use:" -> enlaza a wowhead.com/spell=
+	ItemID int    `json:"itemId"` // itemID del objeto -> enlaza a wowhead.com/item= (tiene prioridad sobre ID)
+	Icon   string `json:"icon"`
 }
 
 type Avoidable struct {

@@ -13,11 +13,14 @@ type Options struct {
 }
 
 // AbilityRef nombra una habilidad con su icono, para que el frontend pueda
-// mostrar el icono y enlazar su tooltip (Wowhead).
+// mostrar el icono y enlazar su tooltip (Wowhead). AbilityKind es "item"
+// cuando AbilityID es un itemID de Wowhead (wowhead.com/item=); vacío (o
+// cualquier otro valor) significa spellID (wowhead.com/spell=), el caso normal.
 type AbilityRef struct {
 	Name        string `json:"name"`
 	AbilityID   int    `json:"abilityId"`
 	AbilityIcon string `json:"abilityIcon"`
+	AbilityKind string `json:"abilityKind,omitempty"`
 }
 
 type AbilityDamage struct {

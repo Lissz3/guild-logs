@@ -76,11 +76,12 @@
     {"name": "Healing Tide Totem", "id": 108280, "class": "Shaman", "specs": ["Restoration"], "cooldown": 180, "kind": "raid"},
 
     {"name": "Unending Resolve", "id": 104773, "class": "Warlock", "cooldown": 180, "kind": "personal"},
-    {"name": "Dark Pact", "id": 108416, "class": "Warlock", "cooldown": 60, "kind": "personal", "talent": true}
+    {"name": "Dark Pact", "id": 108416, "class": "Warlock", "cooldown": 60, "kind": "personal", "talent": true},
+    {"name": "Demonic Healthstone", "id": 452930, "class": "Warlock", "cooldown": 60, "kind": "personal", "talent": true}
   ],
   "consumables": [
-    {"name": "Healthstone", "pattern": "healthstone", "requiresClassInRaid": "Warlock", "icon": "inv_stone_04.jpg"},
-    {"name": "Healing Potion", "pattern": "healing potion|health potion", "icon": "inv_potion_127.jpg"}
+    {"name": "Healthstone", "pattern": "healthstone", "requiresClassInRaid": "Warlock", "itemId": 5512, "icon": "warlock_-healthstone.jpg"},
+    {"name": "Healing Potion", "pattern": "healing potion|health potion", "itemId": 271884, "icon": "inv_12_profession_alchemy_lightpotion_purple.jpg"}
   ],
   "avoidable": {
     "_nota": "abilityIDs evitables por encounterID. Rellenar con las mecanicas de la raid actual. Sin esto, la herramienta usa solo la deteccion estadistica (outliers vs mediana de la raid).",

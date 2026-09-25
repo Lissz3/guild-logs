@@ -50,20 +50,24 @@ function iconUrl(icon?: string) {
 }
 
 /**
- * Ability icon + name. When abilityId is known, wraps in a Wowhead spell
- * link: the wowhead tooltip script (see app/layout.tsx) turns hovering it
- * into the real Wowhead tooltip (full description, cooldown, etc.) — WCL's
- * API only exposes name/icon, not ability text.
+ * Ability icon + name. When abilityId is known, wraps in a Wowhead link (spell
+ * by default, or the item page when kind is "item" — e.g. a potion/healthstone,
+ * where the item page is more useful than its "Use:" effect spell page): the
+ * wowhead tooltip script (see app/layout.tsx) turns hovering it into the real
+ * Wowhead tooltip (full description, cooldown, etc.) — WCL's API only exposes
+ * name/icon, not ability text.
  */
 export function AbilityLabel({
   name,
   icon,
   abilityId,
+  kind,
   size = 20,
 }: {
   name: string;
   icon?: string;
   abilityId?: number;
+  kind?: string;
   size?: number;
 }) {
   const content = (
@@ -89,7 +93,7 @@ export function AbilityLabel({
   }
   return (
     <a
-      href={`https://www.wowhead.com/spell=${abilityId}`}
+      href={`https://www.wowhead.com/${kind === "item" ? "item" : "spell"}=${abilityId}`}
       target="_blank"
       rel="noreferrer noopener"
       className="inline-flex items-center gap-1.5 text-fg no-underline hover:underline"
@@ -139,6 +143,7 @@ export function AbilityRefList({
           name={x.name}
           icon={x.abilityIcon}
           abilityId={x.abilityId}
+          kind={x.abilityKind}
           size={size}
         />
       ))}
